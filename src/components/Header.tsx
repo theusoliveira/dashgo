@@ -78,7 +78,7 @@ export function Header() {
           <Avatar
             size="md"
             name="Matheus Oliveira"
-            scr="https://github.com/theusoliveira.png"
+            src="https://github.com/theusoliveira.png"
           />
         </Flex>
       </Flex>
