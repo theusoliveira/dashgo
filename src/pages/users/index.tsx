@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, Icon, Table, Th, Thead, Tr, Checkbox, Tbody, Td, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Icon, Table, Th, Thead, Tr, Checkbox, Tbody, Td, Text, useBreakpointValue, IconButton } from "@chakra-ui/react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 
 import { Header } from "../../components/Header";
@@ -6,6 +6,11 @@ import { Pagination } from "../../components/Pagination";
 import { Sidebar } from "../../components/Sidebar";
 
 export default function UsersList() {
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    lg: true,
+  });
+
   return (
     <Box>
       <Header />
@@ -24,24 +29,24 @@ export default function UsersList() {
               colorScheme="pink"
               leftIcon={<Icon as={RiAddLine} fontSize="20" />}
             >
-              Criar novo usuário
+              Criar novo
             </Button>
           </Flex>
 
           <Table colorScheme="whiteAlpha">
             <Thead>
               <Tr>
-                <Th px="6" color="gray.300" w="8">
+                <Th px={["4", "4", "6"]} color="gray.300" w="8">
                   <Checkbox colorScheme="pink" />
                 </Th>
                 <Th>Usuário</Th>
-                <Th>Data de cadastro</Th>
+                {isWideVersion && <Th>Data de cadastro</Th>}
                 <Th w="8"></Th>
               </Tr>
             </Thead>
             <Tbody>
               <Tr>
-                <Td  px="6">
+                <Td px={["4", "4", "6"]}>
                   <Checkbox colorScheme="pink" />
                 </Td>
                 <Td>
@@ -51,10 +56,10 @@ export default function UsersList() {
                   </Box>
                 </Td>
                 <Td  px="6">
-                  <Text>04 de abril de 2021</Text>
+                  {isWideVersion && <Text>04 de abril de 2021</Text>}
                 </Td>
                 <Td>
-                <Button
+                {/* <Button
                   as="a"
                   size="sm"
                   fontSize="small"
@@ -62,7 +67,15 @@ export default function UsersList() {
                   leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
                 >
                   Editar
-                </Button>
+                </Button> */}
+                <IconButton
+                  aria-label="Editar usuário"
+                  as="a"
+                  size="sm"
+                  fontSize="small"
+                  colorScheme="purple"
+                  icon={<Icon as={RiPencilLine} fontSize="16" />}
+                />
                 </Td>
               </Tr>
             </Tbody>
