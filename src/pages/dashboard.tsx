@@ -1,7 +1,8 @@
-import { Flex, SimpleGrid, Box, Text, theme } from "@chakra-ui/react";
+import { Flex, SimpleGrid, Box, Text, theme } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
-import { Header } from "../components/Header";
-import { Sidebar } from "../components/Sidebar";
+import { ReactElement } from 'react';
+import { Header } from '../components/Header';
+import { Sidebar } from '../components/Sidebar';
 
 const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
@@ -42,7 +43,7 @@ const options = {
       '2021-03-22T00:00:00.000Z',
       '2021-03-23T00:00:00.000Z',
       '2021-03-24T00:00:00.000Z',
-    ]
+    ],
   },
   fill: {
     opacity: 0.3,
@@ -50,16 +51,14 @@ const options = {
     gradient: {
       shade: 'dark',
       opacityFrom: 0.7,
-      opacityTo: 0.3
-    }
-  }
+      opacityTo: 0.3,
+    },
+  },
 };
 
-const series = [
-  { name: 'series1', data: [31, 120, 10, 7, 28, 41, 109] }
-];
+const series = [{ name: 'series1', data: [31, 120, 10, 7, 28, 41, 109] }];
 
-export default function Dashboard() {
+export default function Dashboard(): ReactElement {
   return (
     <Flex direction="column" h="100vh">
       <Header />
@@ -68,23 +67,17 @@ export default function Dashboard() {
         <Sidebar />
 
         <SimpleGrid flex="1" gap="4" minChildWidth="320px" align="flex-start">
-          <Box
-            p={["6", "8"]}
-            bg="gray.800"
-            borderRadius={8}
-            pb="4"
-          >
-            <Text fontSize="lg" mb="4">Inscritos da semana</Text>
+          <Box p={['6', '8']} bg="gray.800" borderRadius={8} pb="4">
+            <Text fontSize="lg" mb="4">
+              Inscritos da semana
+            </Text>
             <Chart options={options} series={series} type="area" height={160} />
           </Box>
 
-          <Box
-            p={["6", "8"]}
-            bg="gray.800"
-            borderRadius={8}
-            pb="4"
-          >
-            <Text fontSize="lg" mb="4">Taxa de abertura</Text>
+          <Box p={['6', '8']} bg="gray.800" borderRadius={8} pb="4">
+            <Text fontSize="lg" mb="4">
+              Taxa de abertura
+            </Text>
             <Chart options={options} series={series} type="area" height={160} />
           </Box>
         </SimpleGrid>
