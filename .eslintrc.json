@@ -24,6 +24,7 @@
     "prettier"
   ],
   "rules": {
+    "no-nested-ternary": "off",
     "import/no-extraneous-dependencies": "off",
     "camelcase": "off",
     "react/prop-types": "off",
