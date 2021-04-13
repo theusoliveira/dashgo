@@ -26,25 +26,31 @@ import { Pagination } from '../../components/Pagination';
 import { Sidebar } from '../../components/Sidebar';
 
 export default function UsersList(): ReactElement {
-  const { data, isLoading, error } = useQuery('users', async () => {
-    const res = await fetch('http://localhost:3000/api/users');
-    const data = await res.json();
+  const { data, isLoading, error } = useQuery(
+    'users',
+    async () => {
+      const res = await fetch('http://localhost:3000/api/users');
+      const data = await res.json();
 
-    const users = data.users.map(user => {
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        created_at: new Date(user.created_at).toLocaleDateString('pt-BR', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric',
-        }),
-      };
-    });
+      const users = data.users.map(user => {
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          created_at: new Date(user.created_at).toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric',
+          }),
+        };
+      });
 
-    return users;
-  });
+      return users;
+    },
+    {
+      staleTime: 1000 * 5, // 5 seconds
+    },
+  );
 
   const isWideVersion = useBreakpointValue({
     base: false,
