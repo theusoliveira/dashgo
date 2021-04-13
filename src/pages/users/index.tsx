@@ -14,16 +14,38 @@ import {
   Text,
   useBreakpointValue,
   IconButton,
+  Spinner,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { ReactElement } from 'react';
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
+import { useQuery } from 'react-query';
 
 import { Header } from '../../components/Header';
 import { Pagination } from '../../components/Pagination';
 import { Sidebar } from '../../components/Sidebar';
 
 export default function UsersList(): ReactElement {
+  const { data, isLoading, error } = useQuery('users', async () => {
+    const res = await fetch('http://localhost:3000/api/users');
+    const data = await res.json();
+
+    const users = data.users.map(user => {
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        created_at: new Date(user.created_at).toLocaleDateString('pt-BR', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric',
+        }),
+      };
+    });
+
+    return users;
+  });
+
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
@@ -55,57 +77,62 @@ export default function UsersList(): ReactElement {
             </Link>
           </Flex>
 
-          <Table colorScheme="whiteAlpha">
-            <Thead>
-              <Tr>
-                <Th px={['4', '4', '6']} color="gray.300" w="8">
-                  <Checkbox colorScheme="pink" />
-                </Th>
-                <Th>Usuário</Th>
-                {isWideVersion && <Th>Data de cadastro</Th>}
-                <Th w="8" />
-              </Tr>
-            </Thead>
-            <Tbody>
-              <Tr>
-                <Td px={['4', '4', '6']}>
-                  <Checkbox colorScheme="pink" />
-                </Td>
-                <Td>
-                  <Box>
-                    <Text fontWeight="bold">Matheus Oliveira</Text>
-                    <Text fontSize="sm" color="gray.300">
-                      mho.oliveira01@gmail.com
-                    </Text>
-                  </Box>
-                </Td>
-                <Td px="6">
-                  {isWideVersion && <Text>04 de abril de 2021</Text>}
-                </Td>
-                <Td>
-                  {/* <Button
-                  as="a"
-                  size="sm"
-                  fontSize="small"
-                  colorScheme="purple"
-                  leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
-                >
-                  Editar
-                </Button> */}
-                  <IconButton
-                    aria-label="Editar usuário"
-                    as="a"
-                    size="sm"
-                    fontSize="small"
-                    colorScheme="purple"
-                    icon={<Icon as={RiPencilLine} fontSize="16" />}
-                  />
-                </Td>
-              </Tr>
-            </Tbody>
-          </Table>
+          {isLoading ? (
+            <Flex justify="center">
+              <Spinner />
+            </Flex>
+          ) : error ? (
+            <Flex justfy="center">
+              <Text>Falha ao obter dados dos usuários</Text>
+            </Flex>
+          ) : (
+            <>
+              <Table colorScheme="whiteAlpha">
+                <Thead>
+                  <Tr>
+                    <Th px={['4', '4', '6']} color="gray.300" w="8">
+                      <Checkbox colorScheme="pink" />
+                    </Th>
+                    <Th>Usuário</Th>
+                    {isWideVersion && <Th>Data de cadastro</Th>}
+                    <Th w="8" />
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {data.map(user => (
+                    <Tr key={user.id}>
+                      <Td px={['4', '4', '6']}>
+                        <Checkbox colorScheme="pink" />
+                      </Td>
+                      <Td>
+                        <Box>
+                          <Text fontWeight="bold">{user.name}</Text>
+                          <Text fontSize="sm" color="gray.300">
+                            {user.email}
+                          </Text>
+                        </Box>
+                      </Td>
+                      <Td px="6">
+                        {isWideVersion && <Text>{user.created_at}</Text>}
+                      </Td>
+                      <Td>
+                        <IconButton
+                          aria-label="Editar usuário"
+                          as="a"
+                          size="sm"
+                          fontSize="small"
+                          colorScheme="purple"
+                          icon={<Icon as={RiPencilLine} fontSize="16" />}
+                        />
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
 
-          <Pagination />
+              <Pagination />
+            </>
+          )}
         </Box>
       </Flex>
     </Box>
