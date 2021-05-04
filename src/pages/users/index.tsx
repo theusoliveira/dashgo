@@ -155,12 +155,12 @@ export default function UsersList({ users }): ReactElement {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const { users, totalCount } = await getUsers(1);
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   const { users, totalCount } = await getUsers(1);
 
-  return {
-    props: {
-      users,
-    },
-  };
-};
+//   return {
+//     props: {
+//       users,
+//     },
+//   };
+// };
